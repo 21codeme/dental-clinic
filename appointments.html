@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointments - DeLas Alas Dental Clinic</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .clinic-title {
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .user-profile {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 32px;
+        }
+
+        .user-name {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .user-email {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+
+        .edit-profile-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .edit-profile-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .nav-menu {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-item.active {
+            background: rgba(255,255,255,0.2);
+            border-left-color: white;
+        }
+
+        .nav-item i {
+            margin-right: 15px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-bottom {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            background: #f8f9fa;
+            background-image: url('images/clinic-background.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            position: relative;
+        }
+        
+        .main-content::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 280px;
+            right: 0;
+            bottom: 0;
+            background: rgba(248, 249, 250, 0.85);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .top-header {
+            background: white;
+            padding: 20px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .filter-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .filter-tab {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .appointments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .appointment-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .appointment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .appointment-header {
+            padding: 20px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .appointment-time {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .appointment-status {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-scheduled {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-completed {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .appointment-body {
+            padding: 20px;
+        }
+
+        .patient-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .patient-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .patient-details h4 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .patient-details p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .appointment-details {
+            margin-bottom: 15px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .detail-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .detail-value {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .appointment-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-cancel {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-complete {
+            background: #28a745;
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .appointments-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="clinic-title">
+                    Delas Alas Dental Clinic
+                    <button class="menu-toggle" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-name" id="userName">Loading...</div>
+                <div class="user-email" id="userEmail">Loading...</div>
+                <button class="edit-profile-btn">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </button>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-th-large"></i>
+                    Dashboard
+                </a>
+                <a href="schedule.html" class="nav-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    Schedule
+                </a>
+                <a href="appointments.html" class="nav-item active">
+                    <i class="fas fa-clock"></i>
+                    Appointments
+                </a>
+                <a href="services.html" class="nav-item">
+                    <i class="fas fa-hand-holding-medical"></i>
+                    Services
+                </a>
+                <a href="dentist-management.html" class="nav-item">
+                    <i class="fas fa-user-md"></i>
+                    Dentist
+                </a>
+                <a href="messages.html" class="nav-item">
+                    <i class="fas fa-comments"></i>
+                    Messages
+                </a>
+            </nav>
+
+            <div class="nav-bottom">
+                <a href="settings.html" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </a>
+                <a href="#" class="nav-item" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Header -->
+            <div class="top-header">
+                <h1 class="page-title">Appointments</h1>
+                <div class="header-actions">
+                    <div class="filter-tabs">
+                        <button class="filter-tab active" onclick="filterAppointments('all')">All</button>
+                        <button class="filter-tab" onclick="filterAppointments('scheduled')">Scheduled</button>
+                        <button class="filter-tab" onclick="filterAppointments('completed')">Completed</button>
+                        <button class="filter-tab" onclick="filterAppointments('cancelled')">Cancelled</button>
+                    </div>
+                    <button class="btn-primary">
+                        <i class="fas fa-plus"></i> New Appointment
+                    </button>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <div class="appointments-grid" id="appointmentsGrid">
+                    <!-- Appointment cards will be generated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load user data from localStorage
+        function loadUserData() {
+            const userData = localStorage.getItem('user');
+            if (userData) {
+                const user = JSON.parse(userData);
+                document.getElementById('userName').textContent = user.fullName;
+                document.getElementById('userEmail').textContent = user.email;
+            } else {
+                window.location.href = 'firebase-login.html';
+            }
+        }
+        
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.href = 'firebase-login.html';
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        // Sample appointments data
+        const appointments = [
+            {
+                id: 1,
+                time: '9:00 AM',
+                date: 'March 25, 2025',
+                patient: 'John Doe',
+                service: 'Dental Cleaning',
+                status: 'scheduled',
+                phone: '+63 912 345 6789',
+                email: 'john.doe@email.com',
+                notes: 'Regular cleaning appointment'
+            },
+            {
+                id: 2,
+                time: '10:30 AM',
+                date: 'March 25, 2025',
+                patient: 'Jane Smith',
+                service: 'Tooth Extraction',
+                status: 'scheduled',
+                phone: '+63 923 456 7890',
+                email: 'jane.smith@email.com',
+                notes: 'Wisdom tooth extraction'
+            },
+            {
+                id: 3,
+                time: '2:00 PM',
+                date: 'March 24, 2025',
+                patient: 'Mike Johnson',
+                service: 'Dental Consultation',
+                status: 'completed',
+                phone: '+63 934 567 8901',
+                email: 'mike.johnson@email.com',
+                notes: 'Initial consultation completed'
+            },
+            {
+                id: 4,
+                time: '3:30 PM',
+                date: 'March 23, 2025',
+                patient: 'Sarah Wilson',
+                service: 'Braces Adjustment',
+                status: 'completed',
+                phone: '+63 945 678 9012',
+                email: 'sarah.wilson@email.com',
+                notes: 'Monthly braces adjustment'
+            },
+            {
+                id: 5,
+                time: '11:00 AM',
+                date: 'March 22, 2025',
+                patient: 'David Brown',
+                service: 'Root Canal',
+                status: 'cancelled',
+                phone: '+63 956 789 0123',
+                email: 'david.brown@email.com',
+                notes: 'Patient cancelled due to emergency'
+            },
+            {
+                id: 6,
+                time: '4:00 PM',
+                date: 'March 26, 2025',
+                patient: 'Lisa Garcia',
+                service: 'Dental Implant',
+                status: 'pending',
+                phone: '+63 967 890 1234',
+                email: 'lisa.garcia@email.com',
+                notes: 'Consultation for dental implant'
+            }
+        ];
+
+        function generateAppointmentCard(appointment) {
+            const statusClass = `status-${appointment.status}`;
+            const initials = appointment.patient.split(' ').map(name => name[0]).join('');
+            
+            return `
+                <div class="appointment-card" data-status="${appointment.status}">
+                    <div class="appointment-header">
+                        <div class="appointment-time">${appointment.time}</div>
+                        <div class="appointment-status ${statusClass}">${appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}</div>
+                    </div>
+                    <div class="appointment-body">
+                        <div class="patient-info">
+                            <div class="patient-avatar">${initials}</div>
+                            <div class="patient-details">
+                                <h4>${appointment.patient}</h4>
+                                <p>${appointment.service}</p>
+                            </div>
+                        </div>
+                        <div class="appointment-details">
+                            <div class="detail-row">
+                                <span class="detail-label">Date:</span>
+                                <span class="detail-value">${appointment.date}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Phone:</span>
+                                <span class="detail-value">${appointment.phone}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Email:</span>
+                                <span class="detail-value">${appointment.email}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Notes:</span>
+                                <span class="detail-value">${appointment.notes}</span>
+                            </div>
+                        </div>
+                        <div class="appointment-actions">
+                            <button class="action-btn btn-edit" onclick="editAppointment(${appointment.id})">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            ${appointment.status === 'scheduled' ? `
+                                <button class="action-btn btn-complete" onclick="completeAppointment(${appointment.id})">
+                                    <i class="fas fa-check"></i> Complete
+                                </button>
+                                <button class="action-btn btn-cancel" onclick="cancelAppointment(${appointment.id})">
+                                    <i class="fas fa-times"></i> Cancel
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderAppointments(filter = 'all') {
+            const appointmentsGrid = document.getElementById('appointmentsGrid');
+            let filteredAppointments = appointments;
+
+            if (filter !== 'all') {
+                filteredAppointments = appointments.filter(apt => apt.status === filter);
+            }
+
+            appointmentsGrid.innerHTML = filteredAppointments.map(generateAppointmentCard).join('');
+        }
+
+        function filterAppointments(filter) {
+            // Update active tab
+            document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Render filtered appointments
+            renderAppointments(filter);
+        }
+
+        function editAppointment(id) {
+            alert(`Edit appointment ${id}`);
+        }
+
+        function completeAppointment(id) {
+            if (confirm('Mark this appointment as completed?')) {
+                const appointment = appointments.find(apt => apt.id === id);
+                appointment.status = 'completed';
+                renderAppointments();
+            }
+        }
+
+        function cancelAppointment(id) {
+            if (confirm('Cancel this appointment?')) {
+                const appointment = appointments.find(apt => apt.id === id);
+                appointment.status = 'cancelled';
+                renderAppointments();
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+            renderAppointments();
+        });
+    </script>
+</body>
+</html>

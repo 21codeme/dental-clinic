@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard - DeLas Alas Dental Clinic</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .clinic-title {
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .user-profile {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 32px;
+        }
+
+        .user-name {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .user-email {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+
+        .edit-profile-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .edit-profile-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .nav-menu {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-item.active {
+            background: rgba(255,255,255,0.2);
+            border-left-color: white;
+        }
+
+        .nav-item i {
+            margin-right: 15px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .nav-bottom {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            background: #f8f9fa;
+        }
+
+        .top-header {
+            background: white;
+            padding: 20px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .search-bar {
+            position: relative;
+        }
+
+        .search-bar input {
+            padding: 10px 15px 10px 40px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            width: 300px;
+            font-size: 14px;
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .header-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header-icon:hover {
+            background: #e9ecef;
+        }
+
+        .time-filter {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8f9fa;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: 30px;
+        }
+
+        .welcome-section {
+            margin-bottom: 30px;
+        }
+
+        .welcome-text {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        .stat-icon.appointments { background: linear-gradient(135deg, #27ae60, #2ecc71); }
+        .stat-icon.treatments { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .stat-icon.payments { background: linear-gradient(135deg, #f39c12, #e67e22); }
+        .stat-icon.records { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .stat-link {
+            color: #27ae60;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .stat-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Bottom Cards */
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .detail-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .appointment-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .appointment-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .appointment-details h4 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .appointment-details p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .appointment-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .meta-label {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .meta-value {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        /* Upcoming Services */
+        .service-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .service-item:last-child {
+            border-bottom: none;
+        }
+
+        .service-info h5 {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .service-info p {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .service-status {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .service-status.scheduled {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .service-status.completed {
+            background: #cce5ff;
+            color: #004085;
+        }
+
+        .service-status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bottom-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-bar input {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="clinic-title">
+                    Delas Alas Dental Clinic
+                    <button class="menu-toggle" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-name" id="userName">Loading...</div>
+                <div class="user-email" id="userEmail">Loading...</div>
+                <button class="edit-profile-btn">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </button>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active">
+                    <i class="fas fa-th-large"></i>
+                    Dashboard
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-calendar-plus"></i>
+                    Book Appointment
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-clock"></i>
+                    My Appointments
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-tooth"></i>
+                    Treatments
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-file-medical"></i>
+                    Medical Records
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-credit-card"></i>
+                    Payments
+                </a>
+            </nav>
+
+            <div class="nav-bottom">
+                <a href="#" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </a>
+                <a href="#" class="nav-item" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Header -->
+            <div class="top-header">
+                <h1 class="page-title">Patient Dashboard</h1>
+                <div class="header-actions">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search">
+                    </div>
+                    <div class="header-icons">
+                        <div class="header-icon">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <div class="header-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                    </div>
+                    <div class="time-filter">
+                        <span>This Month</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <div class="welcome-section">
+                    <h2 class="welcome-text">Welcome back, <span id="welcomeName">Loading...</span></h2>
+                </div>
+
+                <!-- QR Code Card -->
+                <div class="detail-card" style="margin-bottom: 20px;">
+                    <h3 class="card-title">Your Appointment QR Code</h3>
+                    <div style="text-align: center; padding: 20px;">
+                        <canvas id="patientQrCode" style="margin: 0 auto;"></canvas>
+                        <p style="margin-top: 15px; color: #666;">Scan this QR code to view your appointments</p>
+                        <button id="downloadQrBtn" class="edit-profile-btn" style="margin-top: 15px;">
+                            <i class="fas fa-download"></i> Download QR Code
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon appointments">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                        </div>
+                        <div class="stat-number">8</div>
+                        <div class="stat-label">Total Appointments</div>
+                        <a href="#" class="stat-link">View all</a>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon treatments">
+                                <i class="fas fa-tooth"></i>
+                            </div>
+                        </div>
+                        <div class="stat-number">12</div>
+                        <div class="stat-label">Treatments Done</div>
+                        <a href="#" class="stat-link">View history</a>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon payments">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                        </div>
+                        <div class="stat-number">₱15,500</div>
+                        <div class="stat-label">Total Payments</div>
+                        <a href="#" class="stat-link">View bills</a>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div class="stat-icon records">
+                                <i class="fas fa-file-medical"></i>
+                            </div>
+                        </div>
+                        <div class="stat-number">5</div>
+                        <div class="stat-label">Medical Records</div>
+                        <a href="#" class="stat-link">View records</a>
+                    </div>
+                </div>
+
+                <!-- Bottom Cards -->
+                <div class="bottom-grid">
+                    <!-- Next Appointment -->
+                    <div class="detail-card">
+                        <h3 class="card-title">Next Appointment</h3>
+                        <div class="appointment-info">
+                            <div class="appointment-avatar">DM</div>
+                            <div class="appointment-details">
+                                <h4>Dr. Maria Santos</h4>
+                                <p>Dental Cleaning</p>
+                            </div>
+                        </div>
+                        <div class="appointment-meta">
+                            <div class="meta-item">
+                                <span class="meta-label">Date</span>
+                                <span class="meta-value">March 25, 2025</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Time</span>
+                                <span class="meta-value">10:00 AM</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Duration</span>
+                                <span class="meta-value">1 hour</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Room</span>
+                                <span class="meta-value">Room 2</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Services -->
+                    <div class="detail-card">
+                        <h3 class="card-title">Upcoming Services</h3>
+                        <div class="service-item">
+                            <div class="service-info">
+                                <h5>Dental Cleaning</h5>
+                                <p>March 25, 2025 - 10:00 AM</p>
+                            </div>
+                            <span class="service-status scheduled">Scheduled</span>
+                        </div>
+                        <div class="service-item">
+                            <div class="service-info">
+                                <h5>Tooth Extraction</h5>
+                                <p>March 30, 2025 - 2:00 PM</p>
+                            </div>
+                            <span class="service-status pending">Pending</span>
+                        </div>
+                        <div class="service-item">
+                            <div class="service-info">
+                                <h5>Dental Checkup</h5>
+                                <p>February 15, 2025 - 9:00 AM</p>
+                            </div>
+                            <span class="service-status completed">Completed</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <script src="assets/js/firebase-config.js"></script>
+    <script src="assets/js/qr-code.js"></script>
+    <script>
+        // Initialize QR code when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get download button
+            const downloadQrBtn = document.getElementById('downloadQrBtn');
+            if (downloadQrBtn) {
+                downloadQrBtn.addEventListener('click', function() {
+                    const userId = localStorage.getItem('userId');
+                    const userName = document.getElementById('userName').textContent;
+                    if (userId) {
+                        qrCodeGenerator.downloadQRCode(userId, userName);
+                    }
+                });
+            }
+        });
+        
+        // Load user data from localStorage
+        function loadUserData() {
+            const userData = localStorage.getItem('user');
+            if (userData) {
+                const user = JSON.parse(userData);
+                document.getElementById('userName').textContent = user.fullName;
+                document.getElementById('userEmail').textContent = user.email;
+                document.getElementById('welcomeName').textContent = user.fullName;
+                
+                // Generate QR code for patient
+                if (document.getElementById('patientQrCode')) {
+                    const userId = localStorage.getItem('userId');
+                    if (userId) {
+                        qrCodeGenerator.generatePatientQR(userId, 'patientQrCode');
+                    }
+                }
+            } else {
+                // No user data, redirect to login
+                window.location.href = 'firebase-login.html';
+            }
+        }
+        
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.href = 'firebase-login.html';
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+        
+        // Load user data when page loads
+        document.addEventListener('DOMContentLoaded', loadUserData);
+    </script>
+</body>
+</html>

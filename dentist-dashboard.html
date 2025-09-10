@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dentist Dashboard - Delas Alas Dental Clinic</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Dentist Dashboard Section -->
+    <div id="dentist-dashboard-section" class="dashboard-section">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="clinic-title">
+                    <h2>Delas Alas Dental Clinic</h2>
+                </div>
+                <div class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+            
+            <div class="user-profile">
+                <div class="avatar">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <div class="user-info">
+                    <h3 id="dentistName">Dr. Vanessa</h3>
+                    <p id="dentistEmail">dr.vanessa@clinic.com</p>
+                    <button id="dentistEditProfileBtn" class="btn btn-sm btn-secondary">
+                        <i class="fas fa-edit"></i> Edit Profile
+                    </button>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="nav-item active">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#schedule" class="nav-item">
+                    <i class="fas fa-calendar"></i>
+                    <span>Schedule</span>
+                </a>
+                <a href="#appointments" class="nav-item">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Appointments</span>
+                </a>
+                <a href="#services" class="nav-item">
+                    <i class="fas fa-tools"></i>
+                    <span>Services</span>
+                </a>
+                <a href="#dentists" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Dentists</span>
+                </a>
+                <a href="#messages" class="nav-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>Messages</span>
+                </a>
+                <a href="#settings" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+                <button id="dentistLogoutBtn" class="nav-item logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Dashboard Header -->
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <h1>Dashboard</h1>
+                </div>
+                
+                <div class="header-center">
+                    <div class="search-bar">
+                        <input type="text" id="searchInput" placeholder="Search patients, appointments...">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+                
+                <div class="header-right">
+                    <button id="settingsBtn" class="header-btn">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <button id="notificationsBtn" class="header-btn">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <select id="timeFilter" class="time-filter">
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                    </select>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Stats Cards -->
+                <section class="stats-section">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Today's Appointments</h3>
+                                <p class="stat-number">8</p>
+                                <span class="stat-change positive">+2 from yesterday</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Total Patients</h3>
+                                <p class="stat-number">156</p>
+                                <span class="stat-change positive">+12 this month</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Average Wait Time</h3>
+                                <p class="stat-number">15 min</p>
+                                <span class="stat-change negative">+3 min from last week</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Patient Satisfaction</h3>
+                                <p class="stat-number">4.8/5</p>
+                                <span class="stat-change positive">+0.2 from last month</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Recent Appointments -->
+                <section class="recent-appointments">
+                    <div class="section-header">
+                        <h2>Recent Appointments</h2>
+                        <a href="#appointments" class="btn btn-secondary">View All</a>
+                    </div>
+                    
+                    <div class="appointments-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Patient</th>
+                                    <th>Service</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>9:00 AM</td>
+                                    <td>John Smith</td>
+                                    <td>Dental Cleaning</td>
+                                    <td><span class="status confirmed">Confirmed</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary">Start</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>10:30 AM</td>
+                                    <td>Sarah Johnson</td>
+                                    <td>Teeth Whitening</td>
+                                    <td><span class="status confirmed">Confirmed</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary">Start</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2:00 PM</td>
+                                    <td>Mike Davis</td>
+                                    <td>Dental Filling</td>
+                                    <td><span class="status pending">Pending</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-secondary">Confirm</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Quick Actions -->
+                <section class="quick-actions">
+                    <div class="section-header">
+                        <h2>Quick Actions</h2>
+                    </div>
+                    
+                    <div class="actions-grid">
+                        <button class="action-card">
+                            <i class="fas fa-plus-circle"></i>
+                            <h3>New Appointment</h3>
+                            <p>Schedule a new patient appointment</p>
+                        </button>
+                        
+                        <button class="action-card">
+                            <i class="fas fa-user-plus"></i>
+                            <h3>Add Patient</h3>
+                            <p>Register a new patient</p>
+                        </button>
+                        
+                        <button class="action-card">
+                            <i class="fas fa-file-medical"></i>
+                            <h3>Patient Records</h3>
+                            <p>Access patient medical history</p>
+                        </button>
+                        
+                        <button class="action-card">
+                            <i class="fas fa-chart-line"></i>
+                            <h3>Reports</h3>
+                            <p>View clinic performance reports</p>
+                        </button>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Profile</h2>
+            <form id="editProfileForm">
+                <div class="form-group">
+                    <label for="editProfileFullName">Full Name</label>
+                    <input type="text" id="editProfileFullName" name="fullName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editProfileEmail">Email</label>
+                    <input type="email" id="editProfileEmail" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editProfilePhone">Phone</label>
+                    <input type="tel" id="editProfilePhone" name="phone">
+                </div>
+                
+                <div class="form-group">
+                    <label for="editProfileSpecialization">Specialization</label>
+                    <select id="editProfileSpecialization" name="specialization">
+                        <option value="general">General Dentistry</option>
+                        <option value="orthodontics">Orthodontics</option>
+                        <option value="periodontics">Periodontics</option>
+                        <option value="endodontics">Endodontics</option>
+                        <option value="oral-surgery">Oral Surgery</option>
+                        <option value="pediatric">Pediatric Dentistry</option>
+                    </select>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeEditProfileModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore-compat.js"></script>
+    <script src="assets/js/firebase-config.js"></script>
+    <script src="assets/js/app.js"></script>
+    
+    <script>
+        // Dentist dashboard specific functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize dentist dashboard
+            initDentistDashboard();
+            
+            // Setup navigation between sections
+            const navItems = document.querySelectorAll('.sidebar-nav .nav-item');
+            
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all nav items
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    
+                    // Add active class to clicked nav item
+                    this.classList.add('active');
+                    
+                    // Handle different navigation items
+                    const targetId = this.getAttribute('href').substring(1);
+                    handleNavigation(targetId);
+                });
+            });
+            
+            // Close edit profile modal
+            window.closeEditProfileModal = function() {
+                document.getElementById('editProfileModal').style.display = 'none';
+            };
+            
+            // Handle navigation
+            function handleNavigation(targetId) {
+                switch(targetId) {
+                    case 'dashboard':
+                        // Already on dashboard
+                        break;
+                    case 'schedule':
+                        showToast('Schedule management coming soon!', 'info');
+                        break;
+                    case 'appointments':
+                        showToast('Appointments management coming soon!', 'info');
+                        break;
+                    case 'services':
+                        showToast('Services management coming soon!', 'info');
+                        break;
+                    case 'dentists':
+                        showToast('Dentist management coming soon!', 'info');
+                        break;
+                    case 'messages':
+                        showToast('Messages coming soon!', 'info');
+                        break;
+                    case 'settings':
+                        showToast('Settings coming soon!', 'info');
+                        break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
