@@ -253,13 +253,24 @@
 
         .auth-left {
             flex: 1;
-            background: linear-gradient(135deg, #20B2AA 0%, #48CAE4 100%);
+            background: url('images/clinic-background.png') center/cover no-repeat;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             position: relative;
             overflow: hidden;
+        }
+
+        .auth-left::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(32, 178, 170, 0.8);
+            z-index: 1;
         }
 
         .auth-right {
@@ -278,31 +289,50 @@
         }
 
         .register-right {
-            background: linear-gradient(135deg, #20B2AA 0%, #48CAE4 100%);
+            background: url('images/clinic-background.png') center/cover no-repeat;
+            position: relative;
+        }
+
+        .register-right::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(32, 178, 170, 0.8);
+            z-index: 1;
         }
 
         .welcome-content {
             text-align: center;
             color: white;
             z-index: 2;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 3rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .tooth-icon-large {
-            font-size: 8rem;
+            font-size: 6rem;
             margin-bottom: 2rem;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
         }
 
         .welcome-content h2 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             margin-bottom: 1rem;
             font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
         .welcome-content p {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             margin-bottom: 2rem;
-            opacity: 0.9;
+            opacity: 0.95;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
 
         .decorative-icons {
@@ -316,16 +346,17 @@
 
         .decorative-icons .icon {
             position: absolute;
-            font-size: 2rem;
-            opacity: 0.7;
-            animation: float 6s ease-in-out infinite;
+            font-size: 1.5rem;
+            opacity: 0.3;
+            animation: float 8s ease-in-out infinite;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
         }
 
-        .icon-1 { top: 10%; left: 10%; animation-delay: 0s; }
-        .icon-2 { top: 20%; right: 15%; animation-delay: 1s; }
-        .icon-3 { top: 60%; left: 5%; animation-delay: 2s; }
-        .icon-4 { bottom: 20%; left: 20%; animation-delay: 3s; }
-        .icon-5 { bottom: 30%; right: 10%; animation-delay: 4s; }
+        .icon-1 { top: 15%; left: 15%; animation-delay: 0s; }
+        .icon-2 { top: 25%; right: 20%; animation-delay: 1.5s; }
+        .icon-3 { top: 65%; left: 10%; animation-delay: 3s; }
+        .icon-4 { bottom: 25%; left: 25%; animation-delay: 4.5s; }
+        .icon-5 { bottom: 35%; right: 15%; animation-delay: 6s; }
 
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
