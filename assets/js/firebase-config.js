@@ -11,32 +11,94 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
-// Initialize Firebase services
-const auth = firebase.auth();
-const db = firebase.firestore();
+let auth, db;
+if (typeof firebase !== 'undefined' && firebase.initializeApp) {
+    firebase.initializeApp(firebaseConfig);
+    
+    // Initialize Firebase services
+    auth = firebase.auth();
+    db = firebase.firestore();
+} else {
+    console.error('Firebase SDK not loaded');
+    // Create mock services for local development
+    auth = {
+        currentUser: null,
+        signInWithEmailAndPassword: function() { return Promise.reject(new Error('Firebase not available')); },
+        createUserWithEmailAndPassword: function() { return Promise.reject(new Error('Firebase not available')); },
+        signOut: function() { return Promise.resolve(); },
+        onAuthStateChanged: function(callback) { callback(null); return function() {}; }
+    };
+    db = {
+        collection: function(name) {
+            return {
+                doc: function(id) {
+                    return {
+                        set: function(data) { return Promise.resolve(); },
+                        get: function() { return Promise.resolve({ exists: false, data: function() { return null; } }); }
+                    };
+                },
+                add: function(data) { return Promise.resolve({ id: 'mock-id' }); },
+                get: function() { return Promise.resolve({ docs: [], forEach: function() {} }); }
+            };
+        }
+    };
+}
 
 // Firebase Authentication Functions
 class FirebaseAuth {
     constructor() {
         this.currentUser = null;
         this.authStateListener = null;
-        this.setupAuthStateListener();
+        if (typeof firebase !== 'undefined') {
+            this.setupAuthStateListener();
+        }
     }
 
     setupAuthStateListener() {
-        this.authStateListener = auth.onAuthStateChanged((user) => {
-            if (user) {
-                this.currentUser = user;
-                this.updateUIForAuthenticatedUser(user);
-                console.log('User signed in:', user.email);
-            } else {
-                this.currentUser = null;
-                this.updateUIForUnauthenticatedUser();
-                console.log('User signed out');
+        if (typeof firebase !== 'undefined' && typeof auth !== 'undefined') {
+            this.authStateListener = auth.onAuthStateChanged(async (user) => {
+                if (user) {
+                    this.currentUser = user;
+                    
+                    // Get fresh token for backend authentication
+                    try {
+                        const token = await user.getIdToken();
+                        if (window.apiClient) {
+                            window.apiClient.setToken(token);
+                        }
+                    } catch (error) {
+                        console.error('Error getting ID token:', error);
+                    }
+                    
+                    this.updateUIForAuthenticatedUser(user);
+                    console.log('User signed in:', user.email);
+                } else {
+                    this.currentUser = null;
+                    if (window.apiClient) {
+                        window.apiClient.clearToken();
+                    }
+                    this.updateUIForUnauthenticatedUser();
+                    console.log('User signed out');
+                }
+            });
+        }
+    }
+
+    // Refresh Firebase token
+    async refreshToken() {
+        if (this.currentUser) {
+            try {
+                const token = await this.currentUser.getIdToken(true); // Force refresh
+                if (window.apiClient) {
+                    window.apiClient.setToken(token);
+                }
+                return token;
+            } catch (error) {
+                console.error('Error refreshing token:', error);
+                throw error;
             }
-        });
+        }
+        return null;
     }
 
     async signUp(email, password, userData) {
@@ -57,7 +119,15 @@ class FirebaseAuth {
     async signIn(email, password) {
         try {
             const userCredential = await auth.signInWithEmailAndPassword(email, password);
-            return userCredential.user;
+            const user = userCredential.user;
+            
+            // Get Firebase ID token for backend authentication
+            const token = await user.getIdToken();
+            if (window.apiClient) {
+                window.apiClient.setToken(token);
+            }
+            
+            return user;
         } catch (error) {
             console.error('Error during sign in:', error);
             throw error;
@@ -67,6 +137,11 @@ class FirebaseAuth {
     async signOut() {
         try {
             await auth.signOut();
+            
+            // Clear backend token
+            if (window.apiClient) {
+                window.apiClient.clearToken();
+            }
         } catch (error) {
             console.error('Error during sign out:', error);
             throw error;
@@ -409,12 +484,30 @@ setupRealtimeUpdates(collection, callback) {
 }
 
 // Initialize Firebase services
-const firebaseAuth = new FirebaseAuth();
-const firebaseFirestore = new FirebaseFirestore();
+let authService, firestoreService;
+
+if (typeof firebase !== 'undefined') {
+    authService = new FirebaseAuth();
+    firestoreService = new FirebaseFirestore();
+} else {
+    // Create dummy objects when Firebase is not available
+    authService = {
+        signUp: () => Promise.reject('Firebase not loaded'),
+        signIn: () => Promise.reject('Firebase not loaded'),
+        signOut: () => Promise.reject('Firebase not loaded'),
+        getCurrentUser: () => null,
+        isAuthenticated: () => false
+    };
+    firestoreService = {
+        createUser: () => Promise.reject('Firebase not loaded'),
+        updateUser: () => Promise.reject('Firebase not loaded'),
+        getUser: () => Promise.reject('Firebase not loaded')
+    };
+}
 
 // Global functions for use in HTML
-window.firebaseAuth = firebaseAuth;
-window.firebaseFirestore = firebaseFirestore;
+window.firebaseAuth = authService;
+window.firebaseFirestore = firestoreService;
 
 // Utility functions
 window.formatFirebaseTimestamp = (timestamp) => {
