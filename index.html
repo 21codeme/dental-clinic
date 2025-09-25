@@ -235,84 +235,225 @@
             padding: 2rem 0;
         }
 
-        /* Modal Styles */
-        .modal {
-            display: none;
+        /* Auth Page Styles */
+        .auth-page {
             position: fixed;
-            z-index: 2000;
-            left: 0;
             top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 2000;
+            background: white;
+        }
+
+        .auth-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .auth-left {
+            flex: 1;
+            background: linear-gradient(135deg, #20B2AA 0%, #48CAE4 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-right {
+            flex: 1;
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .register-left {
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+        }
+
+        .register-right {
+            background: linear-gradient(135deg, #20B2AA 0%, #48CAE4 100%);
+        }
+
+        .welcome-content {
+            text-align: center;
+            color: white;
+            z-index: 2;
+        }
+
+        .tooth-icon-large {
+            font-size: 8rem;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+
+        .welcome-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .welcome-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .decorative-icons {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
+            pointer-events: none;
         }
 
-        .modal-content {
-            background-color: white;
-            margin: 5% auto;
-            padding: 2rem;
-            border-radius: 15px;
+        .decorative-icons .icon {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.7;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .icon-1 { top: 10%; left: 10%; animation-delay: 0s; }
+        .icon-2 { top: 20%; right: 15%; animation-delay: 1s; }
+        .icon-3 { top: 60%; left: 5%; animation-delay: 2s; }
+        .icon-4 { bottom: 20%; left: 20%; animation-delay: 3s; }
+        .icon-5 { bottom: 30%; right: 10%; animation-delay: 4s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .form-container {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             width: 90%;
             max-width: 500px;
-            position: relative;
-            animation: modalSlideIn 0.3s ease;
+            z-index: 2;
         }
 
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .close {
-            position: absolute;
-            right: 1rem;
-            top: 1rem;
-            font-size: 2rem;
-            cursor: pointer;
-            color: #999;
-        }
-
-        .close:hover {
+        .form-container h2 {
+            text-align: center;
+            margin-bottom: 2rem;
             color: #333;
+            font-size: 2rem;
+        }
+
+        .user-type-toggle {
+            display: flex;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid #E0E0E0;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            background: white;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .toggle-btn.active {
+            background: #1976D2;
+            color: white;
         }
 
         .form-group {
             margin-bottom: 1.5rem;
         }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 0.8rem;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .form-actions {
+        .form-row {
             display: flex;
             gap: 1rem;
-            justify-content: center;
-            margin-top: 2rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #E0E0E0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #F8F9FA;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #1976D2;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+        }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            margin-right: 0.5rem;
+        }
+
+        .forgot-link {
+            color: #1976D2;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+
+        .btn-full {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .btn-secondary {
+            background: #424242;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #616161;
+            transform: translateY(-2px);
         }
 
         /* Responsive */
@@ -423,81 +564,175 @@
         </div>
     </footer>
 
-    <!-- Login Modal -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('loginModal')">&times;</span>
-            <h2>Login</h2>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="loginEmail">Email:</label>
-                    <input type="email" id="loginEmail" required>
+    <!-- Login Page -->
+    <div id="loginPage" class="auth-page" style="display: none;">
+        <div class="auth-container">
+            <!-- Left Side - Welcome Section -->
+            <div class="auth-left">
+                <div class="welcome-content">
+                    <div class="tooth-icon-large">🦷</div>
+                    <h2>Welcome to Login</h2>
+                    <p>Don't have an account?</p>
+                    <button class="btn btn-secondary" onclick="showRegisterPage()">Register</button>
                 </div>
-                <div class="form-group">
-                    <label for="loginPassword">Password:</label>
-                    <input type="password" id="loginPassword" required>
+                <div class="decorative-icons">
+                    <div class="icon icon-1">🦷</div>
+                    <div class="icon icon-2">❤️</div>
+                    <div class="icon icon-3">🩺</div>
+                    <div class="icon icon-4">💊</div>
+                    <div class="icon icon-5">💉</div>
                 </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Login</button>
-                    <button type="button" class="btn btn-outline" onclick="closeModal('loginModal')">Cancel</button>
+            </div>
+            
+            <!-- Right Side - Login Form -->
+            <div class="auth-right">
+                <div class="form-container">
+                    <h2>Login</h2>
+                    <div class="user-type-toggle">
+                        <button class="toggle-btn active" onclick="setUserType('patient')">Patient</button>
+                        <button class="toggle-btn" onclick="setUserType('dentist')">Dentist</button>
+                    </div>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <input type="email" id="loginEmail" placeholder="Email Address" value="ab@gmail.com" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" id="loginPassword" placeholder="Password" value="******" required>
+                        </div>
+                        <div class="form-options">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="rememberMe">
+                                <span class="checkmark"></span>
+                                Remember me
+                            </label>
+                            <a href="#" class="forgot-link">Forgot password?</a>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">Login</button>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 
-    <!-- Register Modal -->
-    <div id="registerModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('registerModal')">&times;</span>
-            <h2>Register</h2>
-            <form id="registerForm">
-                <div class="form-group">
-                    <label for="regName">Full Name:</label>
-                    <input type="text" id="regName" required>
+    <!-- Register Page -->
+    <div id="registerPage" class="auth-page" style="display: none;">
+        <div class="auth-container">
+            <!-- Left Side - Registration Form -->
+            <div class="auth-left register-left">
+                <div class="form-container">
+                    <h2>Register an Account</h2>
+                    <div class="user-type-toggle">
+                        <button class="toggle-btn active" onclick="setUserType('patient')">Patient</button>
+                        <button class="toggle-btn" onclick="setUserType('dentist')">Dentist</button>
+                    </div>
+                    <form id="registerForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="text" id="regName" placeholder="Full Name" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" id="regUsername" placeholder="Username" value="ab@gmail.com" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="text" id="regDob" placeholder="Date of Birth (dd/mm/yyyy)" required>
+                            </div>
+                            <div class="form-group">
+                                <select id="regGender" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="tel" id="regPhone" placeholder="Phone Number" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" id="regEmail" placeholder="Email Address" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" id="regAddress" placeholder="Address" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <input type="password" id="regPassword" placeholder="Create Password" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" id="regConfirmPassword" placeholder="Confirm Password" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">Register</button>
+                    </form>
                 </div>
-                <div class="form-group">
-                    <label for="regEmail">Email:</label>
-                    <input type="email" id="regEmail" required>
+            </div>
+            
+            <!-- Right Side - Welcome Section -->
+            <div class="auth-right register-right">
+                <div class="welcome-content">
+                    <div class="tooth-icon-large">🦷</div>
+                    <h2>Already have an account?</h2>
+                    <button class="btn btn-secondary" onclick="showLoginPage()">Login</button>
                 </div>
-                <div class="form-group">
-                    <label for="regPhone">Phone:</label>
-                    <input type="tel" id="regPhone" required>
+                <div class="decorative-icons">
+                    <div class="icon icon-1">🦷</div>
+                    <div class="icon icon-2">❤️</div>
+                    <div class="icon icon-3">🩺</div>
+                    <div class="icon icon-4">💊</div>
+                    <div class="icon icon-5">💉</div>
                 </div>
-                <div class="form-group">
-                    <label for="regPassword">Password:</label>
-                    <input type="password" id="regPassword" required>
-                </div>
-                <div class="form-group">
-                    <label for="regConfirmPassword">Confirm Password:</label>
-                    <input type="password" id="regConfirmPassword" required>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Register</button>
-                    <button type="button" class="btn btn-outline" onclick="closeModal('registerModal')">Cancel</button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 
     <script>
-        // Modal functions
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'block';
+        let currentUserType = 'patient';
+
+        // Page navigation functions
+        function showLoginPage() {
+            document.getElementById('loginPage').style.display = 'block';
+            document.getElementById('registerPage').style.display = 'none';
+            document.body.style.overflow = 'hidden';
         }
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
+        function showRegisterPage() {
+            document.getElementById('registerPage').style.display = 'block';
+            document.getElementById('loginPage').style.display = 'none';
+            document.body.style.overflow = 'hidden';
         }
 
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modals = document.querySelectorAll('.modal');
-            modals.forEach(modal => {
-                if (event.target === modal) {
-                    modal.style.display = 'none';
-                }
-            });
+        function hideAuthPages() {
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('registerPage').style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
+
+        // User type toggle
+        function setUserType(type) {
+            currentUserType = type;
+            const buttons = document.querySelectorAll('.toggle-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Update header buttons to show auth pages
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update login button
+            const loginBtn = document.querySelector('button[onclick="openModal(\'loginModal\')"]');
+            if (loginBtn) {
+                loginBtn.setAttribute('onclick', 'showLoginPage()');
+            }
+
+            // Update register button
+            const registerBtn = document.querySelector('button[onclick="openModal(\'registerModal\')"]');
+            if (registerBtn) {
+                registerBtn.setAttribute('onclick', 'showRegisterPage()');
+            }
+        });
 
         // Form handling
         document.getElementById('loginForm').addEventListener('submit', function(e) {
@@ -507,9 +742,10 @@
             
             // Simple validation
             if (email && password) {
-                alert('Login successful! Redirecting to patient portal...');
+                const redirectUrl = currentUserType === 'dentist' ? 'dentist-dashboard.html' : 'patient-working.html';
+                alert(`Login successful! Redirecting to ${currentUserType} portal...`);
                 setTimeout(() => {
-                    window.location.href = 'patient-working.html';
+                    window.location.href = redirectUrl;
                 }, 1000);
             } else {
                 alert('Please fill in all fields.');
@@ -531,9 +767,10 @@
             }
             
             if (name && email && phone && password) {
-                alert('Registration successful! Redirecting to patient portal...');
+                const redirectUrl = currentUserType === 'dentist' ? 'dentist-dashboard.html' : 'patient-working.html';
+                alert(`Registration successful! Redirecting to ${currentUserType} portal...`);
                 setTimeout(() => {
-                    window.location.href = 'patient-working.html';
+                    window.location.href = redirectUrl;
                 }, 1000);
             } else {
                 alert('Please fill in all fields.');
@@ -552,6 +789,13 @@
                     });
                 }
             });
+        });
+
+        // Close auth pages when clicking outside
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('auth-page')) {
+                hideAuthPages();
+            }
         });
     </script>
 </body>
