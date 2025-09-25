@@ -715,6 +715,14 @@
         </div>
     </div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Firebase Configuration -->
+    <script src="assets/js/firebase-config.js"></script>
+
     <script>
         let currentUserType = 'patient';
 
@@ -760,46 +768,124 @@
             }
         });
 
-        // Form handling
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        // Form handling with Firebase
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
             
-            // Simple validation
-            if (email && password) {
+            if (!email || !password) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            try {
+                // Show loading state
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Logging in...';
+                submitBtn.disabled = true;
+
+                // Sign in with Firebase
+                await window.firebaseAuth.signIn(email, password);
+                
+                // Get user data from Firestore
+                const user = window.firebaseAuth.getCurrentUser();
+                const userData = await window.firebaseFirestore.getUserByEmail(email);
+                
+                // Store user data in localStorage for dashboard use
+                localStorage.setItem('currentUser', JSON.stringify({
+                    uid: user.uid,
+                    email: user.email,
+                    role: userData?.role || currentUserType,
+                    name: userData?.name || '',
+                    phone: userData?.phone || ''
+                }));
+
                 const redirectUrl = currentUserType === 'dentist' ? 'dentist-dashboard.html' : 'patient-working.html';
-                alert(`Login successful! Redirecting to ${currentUserType} portal...`);
+                alert(`Login successful! Welcome back!`);
                 setTimeout(() => {
                     window.location.href = redirectUrl;
                 }, 1000);
-            } else {
-                alert('Please fill in all fields.');
+
+            } catch (error) {
+                console.error('Login error:', error);
+                alert(`Login failed: ${error.message}`);
+                
+                // Reset button
+                const submitBtn = this.querySelector('button[type="submit"]');
+                submitBtn.textContent = 'Login';
+                submitBtn.disabled = false;
             }
         });
 
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const name = document.getElementById('regName').value;
             const email = document.getElementById('regEmail').value;
             const phone = document.getElementById('regPhone').value;
             const password = document.getElementById('regPassword').value;
             const confirmPassword = document.getElementById('regConfirmPassword').value;
+            const dob = document.getElementById('regDob').value;
+            const gender = document.getElementById('regGender').value;
+            const address = document.getElementById('regAddress').value;
             
-            // Simple validation
+            // Validation
             if (password !== confirmPassword) {
                 alert('Passwords do not match!');
                 return;
             }
             
-            if (name && email && phone && password) {
+            if (!name || !email || !phone || !password) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            try {
+                // Show loading state
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Creating account...';
+                submitBtn.disabled = true;
+
+                // Prepare user data
+                const userData = {
+                    name: name,
+                    email: email,
+                    phone: phone,
+                    dateOfBirth: dob,
+                    gender: gender,
+                    address: address,
+                    role: currentUserType,
+                    isActive: true
+                };
+
+                // Create user with Firebase Auth
+                const user = await window.firebaseAuth.signUp(email, password, userData);
+                
+                // Store user data in localStorage for dashboard use
+                localStorage.setItem('currentUser', JSON.stringify({
+                    uid: user.uid,
+                    email: user.email,
+                    role: currentUserType,
+                    name: name,
+                    phone: phone
+                }));
+
                 const redirectUrl = currentUserType === 'dentist' ? 'dentist-dashboard.html' : 'patient-working.html';
-                alert(`Registration successful! Redirecting to ${currentUserType} portal...`);
+                alert(`Registration successful! Welcome to DeLas Alas Dental Clinic!`);
                 setTimeout(() => {
                     window.location.href = redirectUrl;
                 }, 1000);
-            } else {
-                alert('Please fill in all fields.');
+
+            } catch (error) {
+                console.error('Registration error:', error);
+                alert(`Registration failed: ${error.message}`);
+                
+                // Reset button
+                const submitBtn = this.querySelector('button[type="submit"]');
+                submitBtn.textContent = 'Register';
+                submitBtn.disabled = false;
             }
         });
 
