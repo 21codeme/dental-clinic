@@ -51,7 +51,7 @@
     <div class="loading-container">
         <div class="loading-spinner"></div>
         <div class="loading-text">DeLas Alas Dental Clinic</div>
-        <div class="loading-subtext">Loading patient portal...</div>
+        <div class="loading-subtext">Choose your portal below</div>
         <div style="margin-top: 20px;">
             <a href="patient-working.html" style="color: white; text-decoration: none; margin-right: 20px; padding: 10px 20px; background: rgba(255,255,255,0.2); border-radius: 5px;">👤 Patient Portal</a>
             <a href="dentist-dashboard.html" style="color: white; text-decoration: none; padding: 10px 20px; background: rgba(255,255,255,0.2); border-radius: 5px;">🦷 Dentist Portal</a>
@@ -59,10 +59,8 @@
     </div>
 
     <script>
-        // Redirect to patient dashboard after a short delay
-        setTimeout(() => {
-            window.location.href = 'patient-working.html';
-        }, 2000);
+        // No automatic redirect - let users choose
+        console.log('Welcome to DeLas Alas Dental Clinic!');
     </script>
 </body>
 </html>
